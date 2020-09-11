@@ -93,11 +93,11 @@
 
     function updateClock() {
         var currentDate = new Date();
+        
         var hours = currentDate.getHours() % 12;
         var minutes = currentDate.getMinutes();
         var seconds = currentDate.getSeconds();
-        console.log(hours, minutes, seconds);
-
+        
         document.getElementById('hour').style.transform = `rotate(${hours * 360 / 12}deg)`;
         document.getElementById('minute').style.transform = `rotate(${minutes * 360 / 60}deg)`;
         document.getElementById('second').style.transform = `rotate(${seconds * 360 / 60}deg)`;
