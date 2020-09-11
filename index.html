@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Modern Javascript Clock</title>
+</head>
+<body>
+
+    <div class="clock">
+        <div class="hours">
+            <div id="hour"></div>
+        </div>
+        <div class="minutes">
+            <div id="minute"></div>
+        </div>
+        <div class="seconds">
+            <div id="second"></div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<style>
+
+    html, body {
+        height: 100%;
+    }
+
+    body {
+        background: #1c272d;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .clock {
+        width: 351px;
+        height: 351px;
+        background: url('clockbg.png');
+        position: relative;
+        border-radius: 100%;
+        box-shadow: 0 20px 10px #0003;
+    }
+
+    .hours, .minutes, .seconds {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #hour {
+        background: url('hour.png');
+        width: 4px;
+        height: 155px;
+    }
+
+    #minute {
+        background: url('min.png');
+        width: 4px;
+        height: 194px;
+    }
+
+    #second {
+        background: url('sec.png');
+        width: 11px;
+        height: 206px;
+    }
+
+</style>
+
+<script>
+
+    updateClock();
+
+    setInterval(function() {
+        updateClock();
+    }, 1000);
+
+    function updateClock() {
+        var currentDate = new Date();
+        var hours = currentDate.getHours() % 12;
+        var minutes = currentDate.getMinutes();
+        var seconds = currentDate.getSeconds();
+        console.log(hours, minutes, seconds);
+
+        document.getElementById('hour').style.transform = `rotate(${hours * 360 / 12}deg)`;
+        document.getElementById('minute').style.transform = `rotate(${minutes * 360 / 60}deg)`;
+        document.getElementById('second').style.transform = `rotate(${seconds * 360 / 60}deg)`;
+    }
+
+</script>
