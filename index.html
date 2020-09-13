@@ -7,18 +7,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Modern Javascript Clock</title>
 </head>
-<body>
+<body class="dark">
+
     <div class="clock">
         <div class="minutes">
             <div id="minute"></div>
         </div>
-        <div class="hours">
+		<div class="hours">
             <div id="hour"></div>
         </div>
         <div class="seconds">
             <div id="second"></div>
         </div>
     </div>
+
+    <div id="switch">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 143.7c-61.8 0-112 50.3-112 112.1s50.2 112.1 112 112.1 112-50.3 112-112.1-50.2-112.1-112-112.1zm0 192.2c-44.1 0-80-35.9-80-80.1s35.9-80.1 80-80.1 80 35.9 80 80.1-35.9 80.1-80 80.1zm256-80.1c0-5.3-2.7-10.3-7.1-13.3L422 187l19.4-97.9c1-5.2-.6-10.7-4.4-14.4-3.8-3.8-9.1-5.5-14.4-4.4l-97.8 19.4-55.5-83c-6-8.9-20.6-8.9-26.6 0l-55.5 83-97.8-19.5c-5.3-1.1-10.6.6-14.4 4.4-3.8 3.8-5.4 9.2-4.4 14.4L90 187 7.1 242.5c-4.4 3-7.1 8-7.1 13.3 0 5.3 2.7 10.3 7.1 13.3L90 324.6l-19.4 97.9c-1 5.2.6 10.7 4.4 14.4 3.8 3.8 9.1 5.5 14.4 4.4l97.8-19.4 55.5 83c3 4.5 8 7.1 13.3 7.1s10.3-2.7 13.3-7.1l55.5-83 97.8 19.4c5.4 1.2 10.7-.6 14.4-4.4 3.8-3.8 5.4-9.2 4.4-14.4L422 324.6l82.9-55.5c4.4-3 7.1-8 7.1-13.3zm-116.7 48.1c-5.4 3.6-8 10.1-6.8 16.4l16.8 84.9-84.8-16.8c-6.6-1.4-12.8 1.4-16.4 6.8l-48.1 72-48.1-71.9c-3-4.5-8-7.1-13.3-7.1-1 0-2.1.1-3.1.3l-84.8 16.8 16.8-84.9c1.2-6.3-1.4-12.8-6.8-16.4l-71.9-48.1 71.9-48.2c5.4-3.6 8-10.1 6.8-16.4l-16.8-84.9 84.8 16.8c6.5 1.3 12.8-1.4 16.4-6.8l48.1-72 48.1 72c3.6 5.4 9.9 8.1 16.4 6.8l84.8-16.8-16.8 84.9c-1.2 6.3 1.4 12.8 6.8 16.4l71.9 48.2-71.9 48z"/></svg>
+    </div>
+
 </body>
 </html>
 
@@ -29,10 +35,17 @@
     }
 
     body {
-        background: #1c272d;
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    body.dark {
+        background: #1c272d;
+    }
+
+    body.light {
+        background: #FFF;
     }
 
     * {
@@ -44,10 +57,18 @@
     .clock {
         width: 351px;
         height: 351px;
-        background: url('clockbg.png');
+
         position: relative;
         border-radius: 100%;
         box-shadow: 0 20px 10px #0003;
+    }
+
+    .dark .clock {
+        background: url('dark/clockbg.png');
+    }
+
+    .light .clock {
+        background: url('light/clockbg.png');
     }
 
     .hours, .minutes, .seconds {
@@ -62,21 +83,76 @@
     }
 
     #hour {
-        background: url('hour.png');
         width: 4px;
         height: 155px;
     }
 
+    .dark #hour {
+        background: url('dark/hour.png');
+    }
+
+    .light #hour {
+        background: url('light/hour.png');
+    }
+
     #minute {
-        background: url('min.png');
         width: 4px;
         height: 194px;
     }
 
+    .dark #minute {
+        background: url('dark/min.png');
+    }
+
+    .light #minute {
+        background: url('light/min.png');
+    }
+
     #second {
-        background: url('sec.png');
         width: 11px;
         height: 206px;
+    }
+
+    .dark #second {
+        background: url('dark/sec.png');
+    }
+
+    .light #second {
+        background: url('light/sec.png');
+    }
+
+    #switch {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    #switch svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .dark #switch {
+        background: #FFF1;
+    }
+
+    .dark #switch svg {
+        fill: #FFF;
+    }
+
+    .light #switch {
+        background: #0001;
+    }
+
+    .light #switch svg {
+        fill: #000;
     }
 
 </style>
@@ -91,14 +167,34 @@
 
     function updateClock() {
         var currentDate = new Date();
-        
+
         var hours = currentDate.getHours() % 12;
         var minutes = currentDate.getMinutes();
         var seconds = currentDate.getSeconds();
-        
+
+        hours = parseFloat(hours + '.' + minutes);
+
         document.getElementById('hour').style.transform = `rotate(${hours * 360 / 12}deg)`;
         document.getElementById('minute').style.transform = `rotate(${minutes * 360 / 60}deg)`;
         document.getElementById('second').style.transform = `rotate(${seconds * 360 / 60}deg)`;
+		
+		console.log(hours, minutes, seconds);
     }
+
+    document.getElementById('switch').addEventListener('click', event => {
+        if (document.body.classList.contains('dark')) {
+            document.body.classList.remove('dark');
+            document.body.classList.add('light');
+            document.getElementById('switch').innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M448.964 365.617C348.188 384.809 255.14 307.765 255.14 205.419c0-58.893 31.561-112.832 82.574-141.862 25.83-14.7 19.333-53.859-10.015-59.28A258.114 258.114 0 0 0 280.947 0c-141.334 0-256 114.546-256 256 0 141.334 114.547 256 256 256 78.931 0 151.079-35.924 198.85-94.783 18.846-23.22-1.706-57.149-30.833-51.6zM280.947 480c-123.712 0-224-100.288-224-224s100.288-224 224-224c13.984 0 27.665 1.294 40.94 3.745-58.972 33.56-98.747 96.969-98.747 169.674 0 122.606 111.613 214.523 231.81 191.632C413.881 447.653 351.196 480 280.947 480z"/></svg>
+            `;
+        } else {
+            document.body.classList.add('dark');
+            document.body.classList.remove('light');
+            document.getElementById('switch').innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 143.7c-61.8 0-112 50.3-112 112.1s50.2 112.1 112 112.1 112-50.3 112-112.1-50.2-112.1-112-112.1zm0 192.2c-44.1 0-80-35.9-80-80.1s35.9-80.1 80-80.1 80 35.9 80 80.1-35.9 80.1-80 80.1zm256-80.1c0-5.3-2.7-10.3-7.1-13.3L422 187l19.4-97.9c1-5.2-.6-10.7-4.4-14.4-3.8-3.8-9.1-5.5-14.4-4.4l-97.8 19.4-55.5-83c-6-8.9-20.6-8.9-26.6 0l-55.5 83-97.8-19.5c-5.3-1.1-10.6.6-14.4 4.4-3.8 3.8-5.4 9.2-4.4 14.4L90 187 7.1 242.5c-4.4 3-7.1 8-7.1 13.3 0 5.3 2.7 10.3 7.1 13.3L90 324.6l-19.4 97.9c-1 5.2.6 10.7 4.4 14.4 3.8 3.8 9.1 5.5 14.4 4.4l97.8-19.4 55.5 83c3 4.5 8 7.1 13.3 7.1s10.3-2.7 13.3-7.1l55.5-83 97.8 19.4c5.4 1.2 10.7-.6 14.4-4.4 3.8-3.8 5.4-9.2 4.4-14.4L422 324.6l82.9-55.5c4.4-3 7.1-8 7.1-13.3zm-116.7 48.1c-5.4 3.6-8 10.1-6.8 16.4l16.8 84.9-84.8-16.8c-6.6-1.4-12.8 1.4-16.4 6.8l-48.1 72-48.1-71.9c-3-4.5-8-7.1-13.3-7.1-1 0-2.1.1-3.1.3l-84.8 16.8 16.8-84.9c1.2-6.3-1.4-12.8-6.8-16.4l-71.9-48.1 71.9-48.2c5.4-3.6 8-10.1 6.8-16.4l-16.8-84.9 84.8 16.8c6.5 1.3 12.8-1.4 16.4-6.8l48.1-72 48.1 72c3.6 5.4 9.9 8.1 16.4 6.8l84.8-16.8-16.8 84.9c-1.2 6.3 1.4 12.8 6.8 16.4l71.9 48.2-71.9 48z"/></svg>
+            `;
+        }
+    });
 
 </script>
